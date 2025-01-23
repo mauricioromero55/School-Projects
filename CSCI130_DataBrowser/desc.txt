@@ -1,0 +1,2 @@
+A data browser in which users could look through a database of pokemon that was hosted locally off of a laptop using apache web server(MySQL). 
+The info stored for each pokemon in the database included:  name, type, different stats, and a picture. 
