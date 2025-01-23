@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<!--CSCI 130 Data Browser project
+    Mauricio Romero-->
+<html lang="en">
+<head>
+    <style>
+        #stats {
+            float: left;
+            width: 50%;
+        }
+        #picHolder {
+            float: right;
+            width: 50%;
+        }
+        #part1 {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="part1">
+        <table>
+            <tr>
+                <td>
+                    <div id="next">
+                        <input id="nextbutton" type="button" value="Next Pokemon" onclick="Javascript:next()" />
+                    </div>
+                </td>
+                <td>
+                    <div id="previous">
+                        <input id="prevbutton" type="button" value="Previous Pokemon" onclick="Javascript:prev()" />
+                    </div>
+                </td>
+                <td>
+                    <div id="first">
+                        <input id="firstbutton" type="button" value="Go to First Pokemon" onclick="Javascript:firstPokemon()" />
+                    </div>
+                </td>
+                <td>
+                    <div id="last">
+                        <input id="lastbutton" type="button" value="Go to Last Pokemon" onclick="Javascript:lastPokemon()" />
+                    </div>
+                </td>
+                <td>
+                    <div id="saveEdit">
+                        <input id="saveeditbutton" type="button" value="Save Edit" onclick="Javascript:saveEdit()" />
+                    </div><br />
+                    <div>
+                        <button onclick="toggleEdit()">Toggle Edit</button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div id="insert creation">
+                        <input id="insertcreatebutton" type="button" value="Insert New Pokemon" onclick="Javascript:createInput()" />
+                    </div>
+                </td>
+                <td>
+                    <div id="delete">
+                        <input id="insertcreatebutton" type="button" value="Delete Current Pokemon" onclick="Javascript:deletePokemon()" />
+                    </div>
+                </td>
+                <td>
+                    <div id="sortByID">
+                        <input id="sortIDbutton" type="button" value="Sort By ID" onclick="Javascript:sortByID()" />
+                    </div>
+                </td>
+                <td>
+                    <div id="sortByABC">
+                        <input id="sortABCbutton" type="button" value="Sort By Name" onclick="Javascript:sortByName()" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br />
+    <div id="stats">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <h4>Sorted By: </h4>
+                    </td>
+                    <td>
+                        <p id="sort"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Total: </h4>
+                    </td>
+                    <td>
+                        <p id="total"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Pokemon ID: </h4>
+                    </td>
+                    <td>
+                        <p id="id"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Pokemon Name: </h4>
+                    </td>
+                    <td>
+                        <input type="text" id="name" class="edit" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Pokemon Type: </h4>
+                    </td>
+                    <td>
+                        <input type="text" id="type" class="edit" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Gender: </h4>
+                    </td>
+                    <td>
+                        <input type="text" id="gender" class="edit" />
+                    </td>
+                </tr>
+                <br />
+                <tr>
+                    <td>
+                        <h4>HP: </h4>
+                    </td>
+                    <td>
+                        <input type="text" id="hp" class="edit" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Attack: </h4>
+                    </td>
+                    <td>
+                        <input type="text" id="atk" class="edit" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Special Attack: </h4>
+                    </td>
+                    <td>
+                        <input type="text" id="spA" class="edit" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Defense: </h4>
+                    </td>
+                    <td>
+                        <input type="text" id="def" class="edit" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Special Defense: </h4>
+                    </td>
+                    <td>
+                        <input type="text" id="spD" class="edit" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Speed: </h4>
+                    </td>
+                    <td>
+                        <input type="text" id="sp" class="edit" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="picHolder">
+        <img id="pokepic"/>
+    </div>
+    <div id="new">
+
+    </div>
+    <script>
+        "use strict"
+        //add another attribute, has to be a string, type is cat, name is string, gender is bool
+        class pokemon {
+            constructor(n, t, g, h, a, d, sa, sd, s, f) {
+                this.name = n
+                this.type = t
+                this.gender = g
+                this.hp = h
+                this.atk = a
+                this.def = d
+                this.spA = sa
+                this.spD = sd
+                this.speed = s
+                this.img = f
+            }
+        }
+        const charizard = new pokemon("Charizard", "Fire/Flying", "Male", 78, 84, 78, 109, 85, 100, "charizard.png")
+        const blastoise = new pokemon("Blastoise", "Water", "Female", 79, 83, 100, 85, 105, 78, "blastoise.png")
+        const venasaur = new pokemon("Venasaur", "Grass/Poison", "Male", 80, 82, 83, 100, 100, 80, "venasaur.png")
+        const typhlosion = new pokemon("Typhlosion", "Fire", "Female", 78, 84, 78, 109, 85, 100, "typhlosion.png")
+        const meganium = new pokemon("Meganium", "Grass", "Male", 80, 82, 100, 83, 100, 80, "meganium.png")
+        const feraligatr = new pokemon("Feraligatr", "Water", "Female", 85, 100, 100, 79, 83, 78, "feraligatr.png")
+
+        const pArr = [charizard, blastoise, venasaur, typhlosion, feraligatr, meganium]
+        var pokeJSON = JSON.stringify(pArr);
+        var currentIndex = 0
+        var indices = []
+        var indexIndex = 0
+        var init = 0
+        //can find funtion to print out JSON inside of one of the 130 labs
+        function initDB() {
+            var request = new XMLHttpRequest()
+            request.open("POST", "database.php", true)
+            request.onreadystatechange = function () {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200) {
+                        //let x = JSON.parse(request.responseText)
+                        document.getElementById('sort').innerHTML = 'ID'
+                        console.log(request.responseText)
+                        retrievAllIndexes()
+                    }
+                    else {
+                        alert(request.status)
+                    }
+                }
+            };
+            request.setRequestHeader("Content-Type", "application/json");
+            request.send(JSON.stringify({ data: pokeJSON }))
+        }
+        initDB()
+        function display(currPokemon) {
+            //put one for total number of items, indices array size
+            document.getElementById('id').innerHTML = currentIndex
+            document.getElementById('total').innerHTML = indices.length
+            document.getElementById('name').value = currPokemon.name
+            document.getElementById('type').value = currPokemon.type
+            document.getElementById('gender').value = currPokemon.gender
+            document.getElementById('hp').value = currPokemon.hp
+            document.getElementById('atk').value = currPokemon.attack;
+            document.getElementById('spA').value = currPokemon.spAttack;
+            document.getElementById('def').value = currPokemon.defense;
+            document.getElementById('spD').value = currPokemon.spDefense;
+            document.getElementById('sp').value = currPokemon.speed;
+            let image = document.getElementById('pokepic')
+            image.src = ""
+            image.src = currPokemon.image
+        }
+        function retrievAllIndexes() {
+            var request = new XMLHttpRequest()
+            request.open("GET", "retrieveIndices.php", true)
+            request.onreadystatechange = function () {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200) {
+                        console.log(request.responseText)
+                        let x = JSON.parse(request.responseText)
+                        console.log(x)
+                        indices = x
+                        //from indices[0]
+                        indexIndex = 0
+                        currentIndex = indices[indexIndex]
+                        //only when loading the page
+                        if (init == 0) {
+                            currentIndex = indices[0]
+                            indexIndex = 0
+                            retrievePokemon()
+                            init = 1
+                        } 
+                    }
+                    else {
+                        alert(request.status)
+                    }
+                }
+            };
+            request.send()
+        }
+        //retrievAllIndexes()
+        var currPokemon
+        function retrievePokemon() {
+            var request = new XMLHttpRequest()
+            request.open("GET", "retrievePokemon.php?id=" + currentIndex, true)
+            request.onreadystatechange = function () {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200) {
+                        console.log(request.responseText)
+                        let x = JSON.parse(request.responseText)
+                        console.log("Retrived: ")
+                        console.log(x)
+                        display(x)
+                    }
+                    else {
+                        alert(request.status)
+                    }
+                }
+            };
+            request.send()
+        }
+        var max = 0
+        //retrieves size of the table, number of rows
+        function getMax() {
+            var request = new XMLHttpRequest()
+            request.open("GET", "getMax.php", true)
+            request.onreadystatechange = function () {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200) {
+                        console.log(request.responseText)
+                        let x = JSON.parse(request.responseText)
+                        max = x
+                    }
+                    else {
+                        alert(request.status)
+                    }
+                }
+            };
+            request.send()
+        }
+        getMax()
+        //get first
+        function firstPokemon() {
+            currentIndex = indices[0]
+            indexIndex = 0
+            retrievePokemon()
+        }
+        //get last
+        function lastPokemon() {
+            getMax()
+            currentIndex = indices[indices.length - 1]
+            indexIndex = indices.length - 1
+            retrievePokemon()
+        }
+        //go to next
+        function next() {
+            getMax()
+            if (currentIndex == indices[indices.length - 1]) {
+                indexIndex = 0
+                currentIndex = indices[0]
+                firstPokemon()
+            }
+            else {
+                indexIndex = Number(indexIndex) + 1
+                currentIndex = indices[indexIndex]
+                retrievePokemon()
+            }
+        }
+        //go to previous
+        function prev() {
+            getMax()
+            if (currentIndex == indices[0]) {
+                indexIndex = indices.length - 1
+                currentIndex = indices[indices.length - 1]
+                lastPokemon()
+            }
+            else {
+                indexIndex = Number(indexIndex) - 1
+                currentIndex = indices[indexIndex]
+                retrievePokemon()
+            }
+            //retrive new pokemon with new index
+        }
+        function upload() {
+            var fileInput = document.getElementById("fileupload");
+            
+            var formData = new FormData();
+            formData.append("fileupload", fileInput.files[0]);
+            var request = new XMLHttpRequest();
+            if (!request) {
+                alert("Error creating request Object");
+            }
+
+            request.open("POST", "uploadImage.php", true);
+
+            request.onreadystatechange = function () {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200) {
+                        console.log("Image uploaded successfully.");
+                        console.log("updated image: ", request.responseText);
+
+                        var response = JSON.parse(request.responseText);
+                        console.log(response)
+                    } else {
+                        console.log("Error uploading image.");
+                    }
+                }
+            };
+
+            request.send(formData);
+        }
+        //insert
+        function createInput() {
+            //create div under everythng in actual html, use DOM to create input boxes AND creation button that will use insert function
+            let area = document.getElementById('new')
+            area.innerHTML = ""
+            let field = document.createElement('fieldset')
+            let nameL = document.createElement('label')
+            let typeL = document.createElement('label')
+            let genL = document.createElement('label')
+            let atkL = document.createElement('label')
+            let defL = document.createElement('label')
+            let spAL = document.createElement('label')
+            let spDL = document.createElement('label')
+            let speedL = document.createElement('label')
+            let hpL = document.createElement('label')
+            let name = document.createElement('input')
+            name.id = 'newname'
+            name.type = 'text'
+            nameL.textContent = 'Name: '
+            nameL.appendChild(name)
+            field.appendChild(nameL)
+            let type = document.createElement('input')
+            type.id = 'newtype'
+            type.type = 'text'
+            typeL.textContent = 'Type: '
+            typeL.appendChild(type)
+            field.appendChild(typeL)
+            let gender = document.createElement('input')
+            gender.id = 'newgender'
+            gender.type = 'text'
+            genL.textContent = 'Gender: '
+            genL.appendChild(gender)
+            field.appendChild(genL)
+            let hp = document.createElement('input')
+            hp.id = 'newhp'
+            hp.type = 'text'
+            hpL.textContent = 'HP: '
+            hpL.appendChild(hp)
+            field.appendChild(hpL)
+            let attack = document.createElement('input')
+            attack.id = 'newattack'
+            attack.type = 'text'
+            atkL.textContent = 'Atk: '
+            atkL.appendChild(attack)
+            field.appendChild(atkL)
+            let defense = document.createElement('input')
+            defense.id = 'newdefense'
+            defense.type = 'text'
+            defL.textContent = 'Def: '
+            defL.appendChild(defense)
+            field.appendChild(defL)
+            let spA = document.createElement('input')
+            spA.id = 'newspA'
+            spA.type = 'text'
+            spAL.textContent = 'spA: '
+            spAL.appendChild(spA)
+            field.appendChild(spAL)
+            let spD = document.createElement('input')
+            spD.id = 'newspD'
+            spD.type = 'text'
+            spDL.textContent = 'spD: '
+            spDL.appendChild(spD)
+            field.appendChild(spDL)
+            let speed = document.createElement('input')
+            speed.id = 'newspeed'
+            speed.type = 'text'
+            speedL.textContent = 'Spd: '
+            speedL.appendChild(speed)
+            field.appendChild(speedL)
+            //create file upload here////////////////////////////////////////////
+            let fUp = document.createElement('input')
+            fUp.id = 'fileupload'
+            fUp.type = 'file'
+            let uploadButton = document.createElement('input')
+            uploadButton.value = 'Upload Picture'
+            uploadButton.onclick = function () {
+                upload()
+            }
+            field.appendChild(fUp)
+            let insertButton = document.createElement('input')
+            insertButton.value = 'Insert Pokemon'
+            insertButton.onclick = function () {
+                upload()
+                insert()
+                area.innerHTML = ""
+            }
+            field.appendChild(insertButton)
+            area.appendChild(field)
+        }
+        function insert() {
+            //creat text boxes for inserting
+            getMax()
+            let newID = max + 1
+            let newName = document.getElementById('newname').value
+            let newType = document.getElementById('newtype').value
+            let newGen = document.getElementById('newgender').value
+            let newHp = document.getElementById('newhp').value
+            let newAtk = document.getElementById('newattack').value
+            let newspA = document.getElementById('newspA').value
+            let newDef = document.getElementById('newdefense').value
+            let newspD = document.getElementById('newspD').value
+            let newSpeed = document.getElementById('newspeed').value
+            let newImage = document.getElementById('fileupload')
+            let file = newImage.files[0]
+            file = 'uploads/' + file.name
+            let dataArr = [newID, newName, newType, newGen, newHp, newAtk, newDef, newspA, newspD, newSpeed, file]
+            console.log(dataArr)
+            var newPoke = JSON.stringify(dataArr)
+            console.log("This is poke Info: " + newPoke)
+            var request = new XMLHttpRequest()
+            request.open("POST", "insert.php", true)
+            request.onreadystatechange = function () {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200) {
+                        console.log(request.responseText)
+                        currentIndex = newID
+                        retrievePokemon()
+                        retrievAllIndexes()
+                        alert('inserted')
+                    }
+                    else {
+                        alert(request.status)
+                    }
+                }
+            };
+            request.setRequestHeader("Content-Type", "application/json");
+            alert('sending')
+            request.send(newPoke)
+        }
+        function deletePokemon() {
+            getMax()
+            max = max - 1
+            let currID = Number(document.getElementById('id').innerHTML)
+            //alert(currID)
+            console.log(currID)
+            var Poke = JSON.stringify(currID)
+            console.log("This is current index: " + Poke)
+            var request = new XMLHttpRequest()
+            request.open("POST", "delete.php", true)
+            request.onreadystatechange = function () {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200) {
+                        console.log(request.responseText)
+                        currentIndex = indices[0]
+                        retrievePokemon()
+                        retrievAllIndexes()
+                        alert('deleted')
+                    }
+                    else {
+                        alert(request.status)
+                    }
+                }
+            };
+            request.setRequestHeader("Content-Type", "application/json");
+            request.send(Poke)
+        }
+        //update values wiht edited values
+        function saveEdit() {
+            let newID = currentIndex
+            let newName = document.getElementById('name').value
+            let newType = document.getElementById('type').value
+            let newGen = document.getElementById('gender').value
+            let newHp = document.getElementById('hp').value
+            let newAtk = document.getElementById('atk').value
+            let newspA = document.getElementById('spA').value
+            let newDef = document.getElementById('def').value
+            let newspD = document.getElementById('spD').value
+            let newSpeed = document.getElementById('sp').value
+            let dataArr = [newID, newName, newType, newGen, newHp, newAtk, newDef, newspA, newspD, newSpeed]
+            console.log(dataArr)
+            
+            var pokeInfo = JSON.stringify(dataArr)
+            console.log("This is poke Info: " + pokeInfo)
+            var request = new XMLHttpRequest()
+            request.open("POST", "saveEdit.php", true)
+            request.onreadystatechange = function () {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200) {
+                        console.log(request.responseText)
+                        alert('modified')
+                    }
+                    else {
+                        alert(request.status)
+                    }
+                }
+            };
+            request.setRequestHeader("Content-Type", "application/json");
+            alert('sending')
+            request.send(pokeInfo)
+        }
+        
+        function toggleEdit() {
+            var editable = document.querySelectorAll(".edit");
+            var toggleButton = document.querySelector("button");
+            var isAnyFieldInEditMode = Array.from(editable).some(function (field) {
+                return field.contentEditable === "true";
+            });
+            editable.forEach(function (field) {
+                if (!isAnyFieldInEditMode) {
+                    field.contentEditable = true;
+                    field.focus();
+                    field.disabled = false;
+                } else {
+                    field.contentEditable = false;
+                    field.blur(); // Blur to remove focus
+                    field.disabled = true;
+                }
+            });
+            toggleButton.textContent = !isAnyFieldInEditMode ? "Stop Edit" : "Start Edit";
+        }
+        //sort by id number
+        function sortByID() {
+            retrievAllIndexes()
+            retrievePokemon()
+            document.getElementById('sort').innerHTML = 'ID'
+            alert('sorted')
+        }
+        function retrieveABCorder() {
+            var request = new XMLHttpRequest()
+            request.open("GET", "retrieveABC.php", true)
+            request.onreadystatechange = function () {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200) {
+                        let x = JSON.parse(request.responseText)
+                        console.log(request.responseText)
+                        console.log(x)
+                        indices = x
+                        //from indices[0]
+                        indexIndex = 0
+                        currentIndex = indices[indexIndex]
+                        retrievePokemon()
+                        //alert('retrieved indices')
+                        //alert(indices)
+                        alert('sorted')
+                    }
+                    else {
+                        alert(request.status)
+                    }
+                }
+            };
+            request.setRequestHeader("Content-Type", "application/json");
+            request.send()
+        }
+        //sorts the items in abc order
+        function sortByName() {
+            //set indices, currentIndex and indexIndex
+            retrieveABCorder()
+            document.getElementById('sort').innerHTML = 'Name(ABC Order)'
+        }
+    </script>
+</body>
+</html>
