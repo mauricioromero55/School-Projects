@@ -1,0 +1,2 @@
+A Zoom-like chatting app, where instructor clients can add student clients into breakout rooms and chat with other students in the same corresponding room. 
+No GUI used, the program is run inside of the command prompt console. Project is entirely written in C++.
